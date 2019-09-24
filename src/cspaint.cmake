@@ -15,7 +15,6 @@ add_library(CsPaint SHARED
   src/cspaint_shader.cpp
   src/cspaint_surface.cpp
   src/cspaint_swapchain.cpp
-  src/cspaint_texture.cpp
 )
 
 target_include_directories(CsPaint PUBLIC
