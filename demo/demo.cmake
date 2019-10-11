@@ -23,10 +23,9 @@ if(sdl2_FOUND)
     DEMO_RESOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/demo/resources"
     )
 
-  target_include_directories(CsPaintDemo PRIVATE ${SDL2_INCLUDE_DIRS}
+  target_include_directories(CsPaintDemo PRIVATE SDL2::SDL2
     ${CMAKE_CURRENT_SOURCE_DIR}/demo
     ${CMAKE_CURRENT_BINARY_DIR}/demo)
 
-  target_link_libraries(CsPaintDemo ${SDL2_LIBRARIES} CsPaint)
-  target_compile_options(CsPaintDemo PUBLIC ${SDL2_CFLAGS_OTHER})
+  target_link_libraries(CsPaintDemo SDL2::SDL2 CsPaint)
 endif()
