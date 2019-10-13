@@ -30,7 +30,7 @@ CsPaint must be built using CMake 3.8 or newer.
 
 Class level documentation for CsPaint is available on the CopperSpice website:
 
-www.copperspice.com/docs/cspaint/index.html
+www.copperspice.com/docs/cs_paint/index.html
 
 
 ### Presentations
