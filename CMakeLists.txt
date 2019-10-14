@@ -25,7 +25,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-find_package(sdl2)
+find_package(sdl2 NAMES SDL2 sdl2)
 set_package_properties(sdl2 PROPERTIES
    DESCRIPTION "Used only by the demo"
    URL "https://www.libsdl.org"

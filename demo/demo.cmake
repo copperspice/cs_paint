@@ -1,4 +1,14 @@
 if(sdl2_FOUND)
+  # Create the target if it isn't there, this can happen on a system that has a
+  # very simple (old) find-module for SDL2.
+  if (NOT TARGET SDL2::SDL2)
+    add_library(SDL2::SDL2 INTERFACE IMPORTED)
+    set_target_properties(SDL2::SDL2 PROPERTIES
+      INTERFACE_INCLUDE_DIRECTORIES "${SDL2_INCLUDE_DIRS}"
+      INTERFACE_LINK_LIBRARIES "${SDL2_LIBRARIES}"
+      )
+  endif()
+
 
   add_executable(CsPaintDemo
     demo/data.cpp
@@ -23,10 +33,9 @@ if(sdl2_FOUND)
     DEMO_RESOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/demo/resources"
     )
 
-  target_include_directories(CsPaintDemo PRIVATE ${SDL2_INCLUDE_DIRS}
+  target_include_directories(CsPaintDemo PRIVATE SDL2::SDL2
     ${CMAKE_CURRENT_SOURCE_DIR}/demo
     ${CMAKE_CURRENT_BINARY_DIR}/demo)
 
-  target_link_libraries(CsPaintDemo ${SDL2_LIBRARIES} CsPaint)
-  target_compile_options(CsPaintDemo PUBLIC ${SDL2_CFLAGS_OTHER})
+  target_link_libraries(CsPaintDemo SDL2::SDL2 CsPaint)
 endif()
