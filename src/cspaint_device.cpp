@@ -19,6 +19,7 @@
 #include <cspaint_device.h>
 
 #include <cspaint_buffer.h>
+#include <cspaint_commandbuffer.h>
 #include <cspaint_commandpool.h>
 #include <cspaint_context.h>
 #include <cspaint_descriptorpool.h>
@@ -248,4 +249,66 @@ CsPaint::image::handle CsPaint::device::createImage(uint32_t width, uint32_t hei
                                                                                       vk::ImageLayout::eUndefined});
 
    return std::make_shared<CsPaint::image>(shared_from_this(), std::move(vk_image), imageFormat, aspectFlags);
+}
+
+std::future<CsPaint::image::handle>
+CsPaint::device::createTexture(const void *data, uint64_t size, uint32_t width, uint32_t height, vk::Format imageFormat,
+                               vk::MemoryPropertyFlags memoryFlags, vk::ImageAspectFlags aspectFlags)
+{
+   std::promise<CsPaint::image::handle> promise;
+
+   CsPaint::buffer::handle tmpBuffer = createBuffer(data, size, vk::BufferUsageFlagBits::eTransferSrc);
+
+   CsPaint::image::handle image =
+      createImage(width, height, imageFormat, vk::ImageTiling::eOptimal,
+                  vk::ImageUsageFlagBits::eSampled | vk::ImageUsageFlagBits::eTransferDst, memoryFlags, aspectFlags);
+
+   auto transferPool                    = graphicsCommandPool();
+   auto transferBuffer                  = transferPool->createCommandBuffer();
+   auto commandBuffer                   = transferBuffer->buffer();
+   vk::CommandBufferBeginInfo beginInfo = {};
+   beginInfo.flags                      = vk::CommandBufferUsageFlagBits::eSimultaneousUse;
+
+   commandBuffer.begin(beginInfo);
+
+   vk::ImageMemoryBarrier transferBarrier1{{},
+                                           vk::AccessFlagBits::eTransferWrite,
+                                           vk::ImageLayout::eUndefined,
+                                           vk::ImageLayout::eTransferDstOptimal,
+                                           0,
+                                           0,
+                                           image->getImage(),
+                                           {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1}};
+
+   commandBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eTransfer, {}, 0, nullptr, 0,
+                                 nullptr, 1, &transferBarrier1);
+
+   vk::BufferImageCopy bufferCopy{0, 0, 0, {vk::ImageAspectFlagBits::eColor, 0, 0, 1}, {0, 0, 0}, {640, 480, 1}};
+   commandBuffer.copyBufferToImage(tmpBuffer->getBuffer(), image->getImage(), vk::ImageLayout::eTransferDstOptimal, 1,
+                                   &bufferCopy);
+
+   vk::ImageMemoryBarrier transferBarrier2{vk::AccessFlagBits::eTransferWrite,
+                                           vk::AccessFlagBits::eShaderRead,
+                                           vk::ImageLayout::eTransferDstOptimal,
+                                           vk::ImageLayout::eShaderReadOnlyOptimal,
+                                           0,
+                                           0,
+                                           image->getImage(),
+                                           {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1}};
+
+   commandBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader, {}, 0, nullptr,
+                                 0, nullptr, 1, &transferBarrier2);
+   commandBuffer.end();
+
+   vk::SubmitInfo submitInfo     = {};
+   submitInfo.commandBufferCount = 1;
+   submitInfo.pCommandBuffers    = &commandBuffer;
+
+   auto vk_queue = graphicsQueue()->getQueue();
+   vk_queue.submit(1, &submitInfo, nullptr);
+   vk_queue.waitIdle();
+
+   promise.set_value(std::move(image));
+
+   return promise.get_future();
 }

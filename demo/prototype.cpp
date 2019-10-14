@@ -114,55 +114,10 @@ void init_pipeline(CsPaint::device::handle device, CsPaint::surface::handle surf
 
 void init_texture(CsPaint::device::handle device)
 {
-   CsPaint::buffer::handle tmpBuffer = device->createBuffer(fontTextureData, vk::BufferUsageFlagBits::eTransferSrc);
-
-   textImage = device->createImage(640, 480, vk::Format::eR8G8B8A8Unorm, vk::ImageTiling::eOptimal,
-                                   vk::ImageUsageFlagBits::eSampled | vk::ImageUsageFlagBits::eTransferDst,
-                                   vk::MemoryPropertyFlagBits::eDeviceLocal, vk::ImageAspectFlagBits::eColor);
-
-   auto transferPool                    = device->graphicsCommandPool();
-   auto transferBuffer                  = transferPool->createCommandBuffer();
-   auto commandBuffer                   = transferBuffer->buffer();
-   vk::CommandBufferBeginInfo beginInfo = {};
-   beginInfo.flags                      = vk::CommandBufferUsageFlagBits::eSimultaneousUse;
-
-   commandBuffer.begin(beginInfo);
-
-   vk::ImageMemoryBarrier transferBarrier1{{},
-                                           vk::AccessFlagBits::eTransferWrite,
-                                           vk::ImageLayout::eUndefined,
-                                           vk::ImageLayout::eTransferDstOptimal,
-                                           0,
-                                           0,
-                                           textImage->getImage(),
-                                           {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1}};
-   commandBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eTransfer, {}, 0, nullptr, 0,
-                                 nullptr, 1, &transferBarrier1);
-
-   vk::BufferImageCopy bufferCopy{0, 0, 0, {vk::ImageAspectFlagBits::eColor, 0, 0, 1}, {0, 0, 0}, {640, 480, 1}};
-   commandBuffer.copyBufferToImage(tmpBuffer->getBuffer(), textImage->getImage(), vk::ImageLayout::eTransferDstOptimal, 1,
-                                   &bufferCopy);
-
-   vk::ImageMemoryBarrier transferBarrier2{vk::AccessFlagBits::eTransferWrite,
-                                           vk::AccessFlagBits::eShaderRead,
-                                           vk::ImageLayout::eTransferDstOptimal,
-                                           vk::ImageLayout::eShaderReadOnlyOptimal,
-                                           0,
-                                           0,
-                                           textImage->getImage(),
-                                           {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1}};
-
-   commandBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eFragmentShader, {}, 0, nullptr,
-                                 0, nullptr, 1, &transferBarrier2);
-   commandBuffer.end();
-
-   vk::SubmitInfo submitInfo     = {};
-   submitInfo.commandBufferCount = 1;
-   submitInfo.pCommandBuffers    = &commandBuffer;
-
-   auto vk_queue = device->graphicsQueue()->getQueue();
-   vk_queue.submit(1, &submitInfo, nullptr);
-   vk_queue.waitIdle();
+   textImage = device
+                  ->createTexture(fontTextureData, 640, 480, vk::Format::eR8G8B8A8Unorm, vk::MemoryPropertyFlagBits::eDeviceLocal,
+                                  vk::ImageAspectFlagBits::eColor)
+                  .get();
 
    vk::SamplerCreateInfo samplerInfo = {};
    samplerInfo.magFilter             = vk::Filter::eLinear;
