@@ -9,10 +9,10 @@ if(sdl2_FOUND)
       )
   endif()
 
-
   add_executable(CsPaintDemo
     demo/data.cpp
     demo/demo.cpp
+    demo/init.cpp
     demo/prototype.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/demo/resources/shader.frag.h
     ${CMAKE_CURRENT_BINARY_DIR}/demo/resources/shader.vert.h
