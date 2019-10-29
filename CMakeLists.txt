@@ -1,8 +1,14 @@
 cmake_minimum_required(VERSION 3.8.0 FATAL_ERROR)
 
+cmake_policy(VERSION 3.8..3.13)
+
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 project(CsPaint)
+
+set(BUILD_MAJOR "1")
+set(BUILD_MINOR "0")
+set(BUILD_MICRO "0")
 
 include(CheckCXXCompilerFlag)
 include(CheckCXXSourceCompiles)
@@ -12,18 +18,31 @@ include(CheckTypeSize)
 include(FeatureSummary)
 include(CompileShaders)
 
-if(UNIX)
-    include(GNUInstallDirs)
-else()
-    set(CMAKE_INSTALL_BINDIR bin)
-    set(CMAKE_INSTALL_LIBDIR lib)
-    set(CMAKE_INSTALL_INCLUDEDIR include)
-endif()
-
 # file locations for building
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+# file locations for installing
+if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
+   include(GNUInstallDirs)
+   set(CMAKE_INSTALL_RPATH "@executable_path")
+
+elseif(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
+   include(GNUInstallDirs)
+   set(CMAKE_INSTALL_RPATH "\$ORIGIN")
+
+elseif(MSVC)
+   # use defaults
+
+elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
+
+   set(CMAKE_INSTALL_BINDIR .)
+
+   set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION .)
+   include(cmake/InstallMinGW.cmake)
+
+endif()
 
 find_package(sdl2 NAMES SDL2 sdl2)
 set_package_properties(sdl2 PROPERTIES
@@ -31,7 +50,6 @@ set_package_properties(sdl2 PROPERTIES
    URL "https://www.libsdl.org"
    TYPE RECOMMENDED
 )
-
 
 find_package(Vulkan)
 set_package_properties(Vulkan PROPERTIES
