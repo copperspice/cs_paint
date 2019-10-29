@@ -133,7 +133,7 @@ void init_render(CsPaint::device::handle device, CsPaint::surface::handle surfac
    textShaderStages.push_back(
       vk::PipelineShaderStageCreateInfo({}, vk::ShaderStageFlagBits::eFragment, textFragmentShader->shaderModule(), "main"));
 
-   descriptorPool = device->createDescriptorPool(FRAME_COUNT, vk::DescriptorType::eUniformBuffer);
+   descriptorPool = device->createDescriptorPool(FRAME_COUNT, vk::DescriptorType::eUniformBuffer, FRAME_COUNT * 2);
 
    for (int i = 0; i < FRAME_COUNT; ++i) {
       descriptors.push_back(descriptorPool->createDescriptor(*descriptorSetLayout));

@@ -64,7 +64,7 @@ class device : public std::enable_shared_from_this<device>
                                           vk::Format imageFormat, vk::MemoryPropertyFlags memoryFlags,
                                           vk::ImageAspectFlags aspectFlags);
 
-  descriptor_pool_handle createDescriptorPool(uint32_t count, vk::DescriptorType);
+  descriptor_pool_handle createDescriptorPool(uint32_t size, vk::DescriptorType, uint32_t count);
 
   shader_handle createShader(std::vector<char> input) const;
   shader_handle createShader(std::vector<uint32_t> input) const;

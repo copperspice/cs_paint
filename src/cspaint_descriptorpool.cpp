@@ -31,6 +31,12 @@ CsPaint::descriptor_pool::descriptor_pool(CsPaint::device::handle device, vk::Un
 
 CsPaint::descriptor::handle CsPaint::descriptor_pool::createDescriptor(vk::DescriptorSetLayout layout)
 {
-   auto vector = m_device->graphicsDevice().allocateDescriptorSetsUnique(vk::DescriptorSetAllocateInfo(*m_pool, 1, &layout));
-   return std::make_shared<descriptor>(shared_from_this(), std::move(vector[0]));
+   auto descriptorSets =
+      m_device->graphicsDevice().allocateDescriptorSetsUnique(vk::DescriptorSetAllocateInfo(*m_pool, 1, &layout));
+
+   if (descriptorSets.empty()) {
+      return nullptr;
+   }
+
+   return std::make_shared<descriptor>(shared_from_this(), std::move(descriptorSets[0]));
 }
