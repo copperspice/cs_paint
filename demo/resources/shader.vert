@@ -23,7 +23,7 @@ layout(location = 1) in vec3 inVertexNormal;
 layout(location = 2) in vec3 inVertexColor;
 layout(location = 3) in vec2 inTexCoords;
 
-uniform UniformBufferObject {
+layout(binding = 0) uniform UniformBufferObject {
   mat4x4 model[6];
   mat4x4 view;
   mat4x4 proj;
