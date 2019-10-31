@@ -49,6 +49,18 @@ if(sdl2_FOUND)
    elseif(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
       # nothing
 
+   elseif(MSVC)
+
+      if (${CMAKE_SIZEOF_VOID_P} MATCHES 8)
+         # 64-bit
+         install(FILES ${SDL2_PREFIX}/lib/x64/sdl2.dll DESTINATION "${CMAKE_INSTALL_BINDIR}")
+
+      else ()
+         #32-bit
+         install(FILES ${SDL2_PREFIX}/lib/x86/sdl2.dll DESTINATION "${CMAKE_INSTALL_BINDIR}")
+
+      endif ()
+
    elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
       install(FILES ${SDL2_PREFIX}/bin/sdl2.dll DESTINATION "${CMAKE_INSTALL_BINDIR}")
 
