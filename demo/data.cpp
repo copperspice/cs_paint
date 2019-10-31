@@ -29,12 +29,12 @@ static std::vector<Vertex> render_string(std::string text, glm::vec3 color);
 const std::multimap<int, std::vector<Vertex>> &init_vertex_data()
 {
    static const std::multimap<int, std::vector<Vertex>> retval =
-      {{0, load_vertices(DEMO_RESOURCE_DIR "/pot.stl", glm::vec3(hexToFloat(0xB8), hexToFloat(0x73), hexToFloat(0x33)))},
-       {1, load_vertices(DEMO_RESOURCE_DIR "/shaker.stl", glm::vec3(hexToFloat(0xF8), hexToFloat(0xDF), hexToFloat(0xA1)))},
-       {2, load_vertices(DEMO_RESOURCE_DIR "/table.stl", glm::vec3(hexToFloat(0xc1), hexToFloat(0x9a), hexToFloat(0x6b)))},
-       {2, load_vertices(DEMO_RESOURCE_DIR "/tabletop.stl", glm::vec3(hexToFloat(0xF1), hexToFloat(0xFa), hexToFloat(0x6b)))},
-       {3, load_vertices(DEMO_RESOURCE_DIR "/frame.stl", glm::vec3(hexToFloat(0x20), hexToFloat(0x20), hexToFloat(0x50)))},
-       {3, load_vertices(DEMO_RESOURCE_DIR "/chalkboard.stl", glm::vec3(hexToFloat(0x05), hexToFloat(0x05), hexToFloat(0x05)))}};
+      {{0, load_vertices(DEMO_RESOURCE_DIR "/pot.stl",        glm::vec3(hexToFloat(0xB8), hexToFloat(0x73), hexToFloat(0x33)))},
+       {1, load_vertices(DEMO_RESOURCE_DIR "/shaker.stl",     glm::vec3(hexToFloat(0x00), hexToFloat(0x0C), hexToFloat(0x00)))},
+       {2, load_vertices(DEMO_RESOURCE_DIR "/table.stl",      glm::vec3(hexToFloat(0xDF), hexToFloat(0xDF), hexToFloat(0xDF)))},
+       {2, load_vertices(DEMO_RESOURCE_DIR "/tabletop.stl",   glm::vec3(hexToFloat(0xC7), hexToFloat(0xAB), hexToFloat(0x7F)))},
+       {3, load_vertices(DEMO_RESOURCE_DIR "/frame.stl",      glm::vec3(hexToFloat(0x8A), hexToFloat(0x36), hexToFloat(0x24)))},
+       {3, load_vertices(DEMO_RESOURCE_DIR "/chalkboard.stl", glm::vec3(hexToFloat(0x10), hexToFloat(0x10), hexToFloat(0x10)))}};
 
    return retval;
 }
@@ -42,7 +42,7 @@ const std::multimap<int, std::vector<Vertex>> &init_vertex_data()
 const std::multimap<int, std::vector<Vertex>> &init_text_data()
 {
    static const std::multimap<int, std::vector<Vertex>> retval =
-      {{4, render_string("CppCon 2019", glm::vec3(hexToFloat(0xFF), hexToFloat(0xFF), hexToFloat(0x00)))},
+      {{4, render_string("CsPaint",       glm::vec3(hexToFloat(0xFF), hexToFloat(0xFF), hexToFloat(0x00)))},
        {5, render_string("GRAPHICS DEMO", glm::vec3(hexToFloat(0xFF), hexToFloat(0xFF), hexToFloat(0x00)))}};
 
    return retval;
@@ -76,8 +76,10 @@ namespace font_texture
 const std::vector<uint32_t> vertexShaderData{std::begin(vertex_shader::shader), std::end(vertex_shader::shader)};
 const std::vector<uint32_t> fragmentShaderData{std::begin(fragment_shader::shader), std::end(fragment_shader::shader)};
 const std::vector<uint32_t> textVertexShaderData{std::begin(text_vertex_shader::shader), std::end(text_vertex_shader::shader)};
+
 const std::vector<uint32_t> textFragmentShaderData{std::begin(text_fragment_shader::shader),
-                                                   std::end(text_fragment_shader::shader)};
+                  std::end(text_fragment_shader::shader)};
+
 const std::vector<uint8_t> fontTextureData{std::begin(font_texture::MagickImage), std::end(font_texture::MagickImage)};
 
 glm::vec3 polar_coordinate(float rho, float theta, float z)
@@ -90,9 +92,9 @@ glm::mat4 transform_matrix(glm::vec3 rotation)
    // position of the copper pot
    glm::mat4 Model = glm::mat4(1.0f);
    Model           = glm::scale(Model, glm::vec3(0.30f));
-   Model           = glm::translate(Model, glm::vec3(-0.60f, 0.65f, 0.0f));
+   Model           = glm::translate(Model, glm::vec3(-0.50f, 0.65f, 0.0f));
    Model           = glm::rotate(Model, rotation.x, glm::vec3(-1.0f, 0.0f, 0.0f));
-   Model           = glm::rotate(Model, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+   Model           = glm::rotate(Model, rotation.y, glm::vec3(0.3f, 1.0f, 0.0f));
 
    return Model;
 }
@@ -119,9 +121,9 @@ Uniform calculate_uniform(glm::mat4 transform_matrix, float aspect_ratio, float 
 
    // position of the table
    auto tableLocation = glm::mat4(1.0f);
-   tableLocation      = glm::translate(tableLocation, glm::vec3(-0.75f, 0.05, 2));
-   tableLocation      = glm::scale(tableLocation, glm::vec3(0.75f));
-   tableLocation      = glm::rotate(tableLocation, glm::pi<float>() * -0.15f, glm::vec3(0.0f, 1.0f, 0.0f));
+   tableLocation      = glm::translate(tableLocation, glm::vec3(-0.78f, 0.05, 2.6));
+   tableLocation      = glm::scale(tableLocation,  glm::vec3(0.75f));
+   tableLocation      = glm::rotate(tableLocation, glm::pi<float>() * -0.11f, glm::vec3(0.0f, 1.0f, 0.0f));
 
    // position of the salt and pepper
    auto shakerMatrix = glm::mat4(1.0f);
@@ -149,13 +151,13 @@ Uniform calculate_uniform(glm::mat4 transform_matrix, float aspect_ratio, float 
    textMatrix      = glm::scale(textMatrix, glm::vec3(0.12f));
    textMatrix      = glm::rotate(textMatrix, glm::pi<float>() * -0.05f, glm::vec3(1.0f, 0.0f, 0.0f));
    textMatrix      = glm::rotate(textMatrix, glm::pi<float>() * 1.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-   textMatrix      = glm::translate(textMatrix, glm::vec3(-7.4f, 1.5f, 0.0f));
+   textMatrix      = glm::translate(textMatrix, glm::vec3(-6.45f, 1.5f, 0.0f));
 
-   // text
+   // show first line of text
    uniformData.modelMatrix[4] = textMatrix;
 
-   // move second line down
-   uniformData.modelMatrix[5] = glm::translate(textMatrix, glm::vec3(-0.4f, -1.0f, 0.0f));
+   // move second line down and left
+   uniformData.modelMatrix[5] = glm::translate(textMatrix, glm::vec3(-1.3f, -1.0f, 0.0f));
 
    // camera
    uniformData.projMatrix = glm::perspective(glm::pi<float>() * 0.10f, aspect_ratio, .1f, 10.0f);

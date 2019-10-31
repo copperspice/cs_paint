@@ -228,10 +228,12 @@ void draw_frame(CsPaint::device::handle device, CsPaint::surface::handle surface
    vkBeginCommandBuffer(vk_buffer, &beginInfo);
 
    VkClearValue clearColor[2];
-   clearColor[0].color        = {0.4f, 0.4f, 0.4f, 0.0f};
+   clearColor[0].color        = {0.9f, 0.9f, 0.9f, 0.0f};
    clearColor[1].depthStencil = {1.0f, 0};
+
    VkExtent2D swapchainExtent = {surface->width(), surface->height()};
    VkBuffer vertexBufferArray[1];
+
    VkDeviceSize offsets[]               = {0};
    VkImageSubresourceRange imageRange   = {};
    imageRange.aspectMask                = VK_IMAGE_ASPECT_COLOR_BIT;

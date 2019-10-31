@@ -22,12 +22,12 @@
 
 std::shared_ptr<SDL_Window> init_window()
 {
-   const uint32_t width  = 1920;
-   const uint32_t height = 1080;
+   const uint32_t width  = 1280;
+   const uint32_t height = 720;
 
    auto retval =
-      std::shared_ptr<SDL_Window>(SDL_CreateWindow("CsPaint Demonstration", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width,
-                                                   height, SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE),
+      std::shared_ptr<SDL_Window>(SDL_CreateWindow("CsPaint Demonstration", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                                                   width, height, SDL_WINDOW_VULKAN),
                                   [](SDL_Window *w) { SDL_DestroyWindow(w); });
 
    if (!retval) {
