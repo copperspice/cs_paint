@@ -58,11 +58,6 @@ namespace fragment_shader
 #include "resources/shader.frag.h"
 };
 
-namespace text_vertex_shader
-{
-#include "resources/text.vert.h"
-};
-
 namespace text_fragment_shader
 {
 #include "resources/text.frag.h"
@@ -75,7 +70,6 @@ namespace font_texture
 
 const std::vector<uint32_t> vertexShaderData{std::begin(vertex_shader::shader), std::end(vertex_shader::shader)};
 const std::vector<uint32_t> fragmentShaderData{std::begin(fragment_shader::shader), std::end(fragment_shader::shader)};
-const std::vector<uint32_t> textVertexShaderData{std::begin(text_vertex_shader::shader), std::end(text_vertex_shader::shader)};
 
 const std::vector<uint32_t> textFragmentShaderData{std::begin(text_fragment_shader::shader),
                   std::end(text_fragment_shader::shader)};

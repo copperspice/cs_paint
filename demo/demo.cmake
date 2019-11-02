@@ -18,7 +18,6 @@ if(sdl2_FOUND)
       ${CMAKE_CURRENT_BINARY_DIR}/demo/resources/shader.frag.h
       ${CMAKE_CURRENT_BINARY_DIR}/demo/resources/shader.vert.h
       ${CMAKE_CURRENT_BINARY_DIR}/demo/resources/text.frag.h
-      ${CMAKE_CURRENT_BINARY_DIR}/demo/resources/text.vert.h
    )
 
    enable_language(GLSL)
