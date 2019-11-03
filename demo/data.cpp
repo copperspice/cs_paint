@@ -43,7 +43,8 @@ const std::multimap<int, std::vector<Vertex>> &init_text_data()
 {
    static const std::multimap<int, std::vector<Vertex>> retval =
       {{4, render_string("CsPaint",       glm::vec3(hexToFloat(0xFF), hexToFloat(0xFF), hexToFloat(0x00)))},
-       {5, render_string("GRAPHICS DEMO", glm::vec3(hexToFloat(0xFF), hexToFloat(0xFF), hexToFloat(0x00)))}};
+       {5, render_string("GRAPHICS DEMO", glm::vec3(hexToFloat(0xFF), hexToFloat(0xFF), hexToFloat(0x00)))},
+       {6, render_string("3D Text",       glm::vec3(hexToFloat(0x2E), hexToFloat(0xB6), hexToFloat(0x7D)))}};
 
    return retval;
 }
@@ -86,7 +87,7 @@ glm::mat4 transform_matrix(glm::vec3 rotation)
    // position of the copper pot
    glm::mat4 Model = glm::mat4(1.0f);
    Model           = glm::scale(Model, glm::vec3(0.30f));
-   Model           = glm::translate(Model, glm::vec3(-0.50f, 0.65f, 0.0f));
+   Model           = glm::translate(Model, glm::vec3(-1.0f, 0.65f, 0.0f));
    Model           = glm::rotate(Model, rotation.x, glm::vec3(-1.0f, 0.0f, 0.0f));
    Model           = glm::rotate(Model, rotation.y, glm::vec3(0.3f, 1.0f, 0.0f));
 
@@ -153,6 +154,18 @@ Uniform calculate_uniform(glm::mat4 transform_matrix, float aspect_ratio, float 
    // move second line down and left
    uniformData.modelMatrix[5] = glm::translate(textMatrix, glm::vec3(-1.3f, -1.0f, 0.0f));
 
+   // Position 3d text
+   auto textMatrix2 = glm::mat4(1.0f);
+
+   textMatrix2      = glm::translate(textMatrix2, glm::vec3(0.0f, -.05f, .99));
+   textMatrix2      = glm::scale(textMatrix2, glm::vec3(0.12f));
+   textMatrix2      = glm::rotate(textMatrix2, glm::pi<float>() * -0.05f, glm::vec3(1.0f, 0.0f, 0.0f));
+   textMatrix2      = glm::rotate(textMatrix2, glm::pi<float>() * 1.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+   textMatrix2      = glm::translate(textMatrix2, glm::vec3(-8.75f, -4.5f, 0.0f));
+   textMatrix2      = glm::scale(textMatrix2, glm::vec3(2.5f));
+
+   uniformData.modelMatrix[6] = textMatrix2;
+
    // camera
    uniformData.projMatrix = glm::perspective(glm::pi<float>() * 0.10f, aspect_ratio, .1f, 10.0f);
 
@@ -160,6 +173,21 @@ Uniform calculate_uniform(glm::mat4 transform_matrix, float aspect_ratio, float 
       uniformData.normalMatrix[i] = glm::inverseTranspose(uniformData.viewMatrix * uniformData.modelMatrix[i]);
    }
    uniformData.lightPosition = glm::vec3{30, -60, -30};
+
+   static const auto start_time = std::chrono::high_resolution_clock::now();
+
+   int64_t elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start_time).count();
+
+   static constexpr const int64_t wavePeriod = 9000;
+   static constexpr const float waveAmplitude = 3.0f;
+
+   float offset = ((elapsed_time % wavePeriod) / float(wavePeriod));
+   if(offset > 0.5) {
+     offset = 1 - offset;
+   }
+   offset = (offset * 2) - 0.5;
+
+   uniformData.waveOffset = offset * waveAmplitude;
 
    return uniformData;
 }

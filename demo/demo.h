@@ -42,7 +42,7 @@ struct Vertex {
 };
 
 //
-constexpr const int NUM_MODELS = 6;
+constexpr const int NUM_MODELS = 7;
 
 struct Uniform {
    glm::mat4 modelMatrix[NUM_MODELS];
@@ -50,6 +50,7 @@ struct Uniform {
    glm::mat4 projMatrix;
    glm::mat4 normalMatrix[NUM_MODELS];
    glm::vec3 lightPosition;
+   float waveOffset;
 };
 
 //

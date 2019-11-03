@@ -37,7 +37,7 @@ void main() {
 
    vec3 fontSample = texture(fontSampler, texCoords).rgb;
    float sigDist = median(fontSample.r, fontSample.g, fontSample.b);
-   float opacity = smoothstep(0.5-smoothing, 0.5+smoothing, sigDist);
+   float opacity = smoothstep(0.4-smoothing, 0.4+smoothing, sigDist);
 
    if(opacity < 0.05) {
       discard;
