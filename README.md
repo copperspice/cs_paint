@@ -17,6 +17,7 @@ download and install the Vulkan SDK from LunarG.
 
 www.lunarg.com/vulkan-sdk/
 
+CsPaint builds with version 1.1.121.1 of the Vulkan SDK, support for newer versions is pending.
 
 Currently CsPaint is supported on Linux and Windows.
 
