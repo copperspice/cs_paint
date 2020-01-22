@@ -26,7 +26,14 @@
 
 static_assert(CsPaint::util::nomove_nocopy_nodefault<CsPaint::context>());
 
-CsPaint::context::context(vk::Instance instance) : m_instance(instance), m_dynamicLoader(m_instance, vkGetInstanceProcAddr)
+CsPaint::context::context(vk::Instance instance)
+   : m_instance(instance),
+     m_dynamicLoader(m_instance, vkGetInstanceProcAddr),
+     m_debugReport(vk::DebugReportCallbackEXT(),
+                   vk::ObjectDestroy<vk::Instance, vk::DispatchLoaderDynamic>(vk::Instance(),
+                                                                              vk::Optional<const vk::AllocationCallbacks>(
+                                                                                 nullptr),
+                                                                              vk::DispatchLoaderDynamic()))
 {
 }
 
