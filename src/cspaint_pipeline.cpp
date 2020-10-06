@@ -92,5 +92,5 @@ CsPaint::pipeline::pipeline(device_handle device, const surface_handle &surface,
                                              pipelineLayout,
                                              renderPass->get()};
    auto retval = m_device->graphicsDevice().createGraphicsPipelinesUnique(vk::PipelineCache(), createInfo);
-   m_pipeline  = std::move(retval[0]);
+   m_pipeline  = std::move(retval.value[0]);
 }
