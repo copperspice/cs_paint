@@ -1,6 +1,7 @@
+# ***********************************************************************
 #
-# Copyright (c) 2012-2019 Barbara Geller
-# Copyright (c) 2012-2019 Ansel Sermersheim
+# Copyright (c) 2019-2023 Barbara Geller
+# Copyright (c) 2019-2023 Ansel Sermersheim
 #
 # This file is part of CsPaint.
 #
@@ -13,6 +14,7 @@
 #
 # https://opensource.org/licenses/BSD-2-Clause
 #
+# ***********************************************************************
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
    set(libgcc libgcc_s_seh-1)
