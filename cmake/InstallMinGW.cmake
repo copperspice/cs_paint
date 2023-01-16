@@ -16,6 +16,10 @@
 #
 # ***********************************************************************
 
+# workaround because cmake 3.17 removed .dll suffix
+set(OLD_CMAKE_FIND_LIBRARY_SUFFIXES  ${CMAKE_FIND_LIBRARY_SUFFIXES})
+set(CMAKE_FIND_LIBRARY_SUFFIXES .dll ${CMAKE_FIND_LIBRARY_SUFFIXES})
+
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
    set(libgcc libgcc_s_seh-1)
 else()
@@ -34,3 +38,6 @@ foreach(library ${mingw_required_libraries})
 endforeach()
 
 include(InstallRequiredSystemLibraries)
+
+# restore
+set(CMAKE_FIND_LIBRARY_SUFFIXES ${OLD_CMAKE_FIND_LIBRARY_SUFFIXES})
