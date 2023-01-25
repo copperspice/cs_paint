@@ -13,7 +13,7 @@ project(CsPaint)
 
 set(BUILD_MAJOR "1")
 set(BUILD_MINOR "0")
-set(BUILD_MICRO "0")
+set(BUILD_MICRO "1")
 
 include(CheckCXXCompilerFlag)
 include(CheckCXXSourceCompiles)
