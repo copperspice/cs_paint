@@ -1,7 +1,7 @@
 /***********************************************************************
 *
-* Copyright (c) 2019-2023 Barbara Geller
-* Copyright (c) 2019-2023 Ansel Sermersheim
+* Copyright (c) 2019-2024 Barbara Geller
+* Copyright (c) 2019-2024 Ansel Sermersheim
 *
 * This file is part of CsPaint.
 *
