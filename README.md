@@ -23,7 +23,7 @@ Currently CsPaint is supported on Linux and Windows.
 
 ### Building
 
-CsPaint must be built using CMake 3.8 or newer.
+CsPaint must be built using CMake 3.16 or newer.
 
 
 ### Documentation
@@ -60,5 +60,11 @@ this project.
 
 ### References
 
-* Website: www.copperspice.com
-* Email:   info@copperspice.com
+* Website:  https://www.copperspice.com
+* Twitter:  https://twitter.com/copperspice_cpp
+* Email:    info@copperspice.com
+
+* Github:   https://github.com/copperspice
+
+* Forum:    https://forum.copperspice.com
+* Journal:  https://journal.copperspice.com
