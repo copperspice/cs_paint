@@ -22,6 +22,7 @@
 #include <cspaint_fwd.h>
 
 #include <vector>
+#include <string>
 
 namespace CsPaint
 {
