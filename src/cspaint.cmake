@@ -23,8 +23,15 @@ target_include_directories(CsPaint
    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
    $<INSTALL_INTERFACE:include/CsPaint>)
 
-target_link_libraries(CsPaint ${Vulkan_LIBRARIES} glm)
-target_compile_features(CsPaint PUBLIC cxx_std_17)
+target_link_libraries(CsPaint
+   ${Vulkan_LIBRARIES}
+   glm
+)
+
+target_compile_features(CsPaint
+   PUBLIC
+   cxx_std_20
+)
 
 if(MSVC)
    set_target_properties(CsPaint
