@@ -12,6 +12,8 @@ if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.20.0")
    cmake_policy(SET CMP0117 OLD)
 endif()
 
+set(SDL2_NO_MWINDOWS on)
+
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 project(CsPaint)
