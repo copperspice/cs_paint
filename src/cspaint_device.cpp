@@ -223,8 +223,8 @@ CsPaint::buffer::handle CsPaint::device::createBuffer(const void *buffer, uint64
 CsPaint::descriptor_pool::handle CsPaint::device::createDescriptorPool(uint32_t size, vk::DescriptorType type, uint32_t count)
 {
 
-   vk::DescriptorPoolSize poolSize{type, count};
-   auto descriptorPool = m_graphicsDevice->createDescriptorPoolUnique(vk::DescriptorPoolCreateInfo{{}, size, 1, &poolSize});
+   vk::DescriptorPoolSize poolSize{type, size * count};
+   auto descriptorPool = m_graphicsDevice->createDescriptorPoolUnique(vk::DescriptorPoolCreateInfo{{}, size * count, 1, &poolSize});
 
    return std::make_shared<CsPaint::descriptor_pool>(shared_from_this(), std::move(descriptorPool));
 }
