@@ -129,7 +129,7 @@ CsPaint::shader::handle CsPaint::device::createShader(std::vector<uint32_t> data
 
 CsPaint::renderpass::handle CsPaint::device::createRenderPass() const
 {
-   vk::Format swapChainImageFormat = vk::Format::eB8G8R8A8Unorm; // broom
+   vk::Format swapChainImageFormat = vk::Format::eB8G8R8A8Unorm;
 
    vk::AttachmentDescription colorAttachment = {{},
                                                 swapChainImageFormat,

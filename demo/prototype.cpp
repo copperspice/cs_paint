@@ -73,10 +73,8 @@ void init_pipeline(CsPaint::device::handle device, CsPaint::surface::handle surf
 
 void init_texture(CsPaint::device::handle device)
 {
-   textImage = device
-                  ->createTexture(fontTextureData, 640, 480, vk::Format::eR8G8B8A8Unorm, vk::MemoryPropertyFlagBits::eDeviceLocal,
-                                  vk::ImageAspectFlagBits::eColor)
-                  .get();
+   textImage = device->createTexture(fontTextureData, 640, 480, vk::Format::eR8G8B8A8Unorm,
+         vk::MemoryPropertyFlagBits::eDeviceLocal, vk::ImageAspectFlagBits::eColor).get();
 
    vk::SamplerCreateInfo samplerInfo = {};
    samplerInfo.magFilter             = vk::Filter::eLinear;
@@ -100,6 +98,7 @@ void init_render(CsPaint::device::handle device, CsPaint::surface::handle surfac
    depthBuffer = device->createImage(surface->width(), surface->height(), vk::Format::eD32SfloatS8Uint, vk::ImageTiling::eOptimal,
                                      vk::ImageUsageFlagBits::eDepthStencilAttachment, vk::MemoryPropertyFlagBits::eDeviceLocal,
                                      vk::ImageAspectFlagBits::eDepth | vk::ImageAspectFlagBits::eStencil);
+
    std::vector<CsPaint::image::handle> imageHandles;
    imageHandles.push_back(depthBuffer);
    s_swapchain    = surface->createSwapchain(renderPass, imageHandles);
@@ -158,8 +157,7 @@ void init_render(CsPaint::device::handle device, CsPaint::surface::handle surfac
    // initialize text from string literals
    for (const auto &item : init_text_data()) {
       textVertexBuffers.emplace(item.first,
-                                std::make_pair(device->createBuffer(item.second, vk::BufferUsageFlagBits::eVertexBuffer),
-                                               item.second.size()));
+            std::make_pair(device->createBuffer(item.second, vk::BufferUsageFlagBits::eVertexBuffer), item.second.size()));
    }
 
    for (int i = 0; i < FRAME_COUNT; ++i) {
@@ -171,6 +169,7 @@ void init_render(CsPaint::device::handle device, CsPaint::surface::handle surfac
                                                                vk::DescriptorType::eUniformBuffer, nullptr, &bufferInfo},
                                                               {descriptors[i]->descriptorSet(), 1, 0, 1,
                                                                vk::DescriptorType::eCombinedImageSampler, &imageInfo, nullptr}};
+
       vk_device.updateDescriptorSets(descriptorWrites, nullptr);
    }
 }
@@ -187,6 +186,7 @@ void reinitialize_framebuffer(CsPaint::device::handle device, CsPaint::surface::
    framebufferResized    = false;
    const auto &vk_device = device->graphicsDevice();
    vk_device.waitIdle();
+
    for (int i = 0; i < FRAME_COUNT; ++i) {
       vkWaitForFences(vk_device, 1, &frameFences[i], VK_TRUE, UINT64_MAX);
    }

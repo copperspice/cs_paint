@@ -34,7 +34,7 @@ CsPaint::swapchain::swapchain(std::shared_ptr<const surface> surface, CsPaint::d
    const auto &vk_device = device->graphicsDevice();
    auto vk_images        = vk_device.getSwapchainImagesKHR(*m_swapchain);
 
-   auto format = vk::Format::eB8G8R8A8Unorm; // BROOM
+   auto format = vk::Format::eB8G8R8A8Unorm;
 
    m_framebuffers = util::map_vector(vk_images, [&vk_device, format, width, height, &images, &renderpass](auto vk_image) {
       auto view = vk_device.createImageViewUnique(
