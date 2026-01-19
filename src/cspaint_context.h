@@ -27,7 +27,17 @@
 #include <memory>
 #include <string>
 #include <vector>
+
 #include <vulkan/vulkan.hpp>
+
+namespace vk_cs
+{
+   using namespace vk;
+
+#if (VK_VERSION_1_3 && VK_HEADER_VERSION >= 300) || (VK_VERSION_1_4)
+   using namespace vk::detail;
+#endif
+}
 
 namespace CsPaint
 {
@@ -66,19 +76,20 @@ class context
       return m_instance;
    }
 
-   using error_callback_t = void(vk::DebugReportFlagsEXT, vk::DebugReportObjectTypeEXT, uint64_t, size_t, int32_t, const char *,
-                                 const char *);
+   using error_callback_t = void(vk::DebugReportFlagsEXT, vk::DebugReportObjectTypeEXT, uint64_t, size_t, int32_t, const char *, const char *);
 
    void setDebugCallback(std::function<error_callback_t> callback,
-                         vk::DebugReportFlagsEXT flags = vk::DebugReportFlagBitsEXT::eError |
-                                                         vk::DebugReportFlagBitsEXT::eWarning);
+         vk::DebugReportFlagsEXT flags = vk::DebugReportFlagBitsEXT::eError | vk::DebugReportFlagBitsEXT::eWarning);
 
  private:
    vk::Instance m_instance;
-   vk::DispatchLoaderDynamic m_dynamicLoader;
+
+   vk_cs::DispatchLoaderDynamic m_dynamicLoader;
+
    std::function<error_callback_t> m_errorCallback;
-   vk::UniqueHandle<vk::DebugReportCallbackEXT, vk::DispatchLoaderDynamic> m_debugReport;
+   vk::UniqueHandle<vk::DebugReportCallbackEXT, vk_cs::DispatchLoaderDynamic> m_debugReport;
 };
+
 }; // namespace CsPaint
 
 #endif

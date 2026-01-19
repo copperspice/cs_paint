@@ -22,18 +22,16 @@
 
 #include <algorithm>
 #include <functional>
+
 #include <vulkan/vulkan.hpp>
 
 static_assert(CsPaint::util::nomove_nocopy_nodefault<CsPaint::context>());
 
 CsPaint::context::context(vk::Instance instance)
-   : m_instance(instance),
-     m_dynamicLoader(m_instance, vkGetInstanceProcAddr),
+   : m_instance(instance), m_dynamicLoader(m_instance, vkGetInstanceProcAddr),
      m_debugReport(vk::DebugReportCallbackEXT(),
-                   vk::ObjectDestroy<vk::Instance, vk::DispatchLoaderDynamic>(vk::Instance(),
-                                                                              vk::Optional<const vk::AllocationCallbacks>(
-                                                                                 nullptr),
-                                                                              vk::DispatchLoaderDynamic()))
+                   vk_cs::ObjectDestroy<vk::Instance, vk_cs::DispatchLoaderDynamic>(vk::Instance(),
+                   vk::Optional<const vk::AllocationCallbacks>(nullptr), vk_cs::DispatchLoaderDynamic()))
 {
 }
 
@@ -71,6 +69,7 @@ CsPaint::context::handle CsPaint::context::create(const char *app_name, uint32_t
                                   const char *pMessage) { fprintf(stderr, "VULKAN MESSAGE: %s\n\n", pMessage); });
 
    } catch (...) {
+      // do nothing
    }
 
    if (retval == nullptr) {
